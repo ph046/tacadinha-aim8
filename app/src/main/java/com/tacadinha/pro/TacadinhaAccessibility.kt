@@ -3,7 +3,6 @@ package com.tacadinha.pro
 import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.AccessibilityServiceInfo
 import android.accessibilityservice.GestureDescription
-import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.graphics.Path
@@ -34,10 +33,10 @@ class TacadinhaAccessibility : AccessibilityService() {
             flags = AccessibilityServiceInfo.FLAG_REQUEST_TOUCH_EXPLORATION_MODE
         }
         serviceInfo = info
-        startForegroundIfNeeded()
+        keepAlive()
     }
 
-    private fun startForegroundIfNeeded() {
+    private fun keepAlive() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val nm = getSystemService(NotificationManager::class.java)
             if (nm.getNotificationChannel(CH) == null) {
@@ -53,11 +52,7 @@ class TacadinhaAccessibility : AccessibilityService() {
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .build()
         try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                startForeground(NID, notif, android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_ACCESSIBILITY)
-            } else {
-                startForeground(NID, notif)
-            }
+            startForeground(NID, notif)
         } catch (e: Exception) {
             e.printStackTrace()
         }
