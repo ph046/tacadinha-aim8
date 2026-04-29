@@ -2,6 +2,7 @@ package com.tacadinha.pro
 
 import android.app.*
 import android.content.Intent
+import android.content.pm.ServiceInfo
 import android.graphics.*
 import android.hardware.display.DisplayManager
 import android.media.ImageReader
@@ -33,12 +34,19 @@ class CaptureService : Service() {
 
     @Suppress("DEPRECATION")
     override fun onStartCommand(intent: Intent?,flags: Int,startId: Int): Int {
-        val code=intent?.getIntExtra(EXTRA_CODE,Activity.RESULT_CANCELED)?:return START_NOT_STICKY
+        val code=intent?.getIntExtra(EXTRA_CODE, Activity.RESULT_CANCELED)?:return START_NOT_STICKY
         val data: Intent=if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.TIRAMISU)
             intent.getParcelableExtra(EXTRA_DATA,Intent::class.java)!!
         else intent.getParcelableExtra(EXTRA_DATA)!!
         playerMode=intent.getIntExtra(EXTRA_MODE,2)
-        startForeground(NID,buildNotif())
+
+        val notif = buildNotif()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            startForeground(NID, notif, ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION)
+        } else {
+            startForeground(NID, notif)
+        }
+
         val pm=getSystemService(MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
         projection=pm.getMediaProjection(code,data)
         reader=ImageReader.newInstance(sw,sh,PixelFormat.RGBA_8888,2)
