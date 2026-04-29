@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Tacadinha Pro</string>
+    <string name="acc_label">Tacadinha Pro</string>
+    <string name="acc_desc">Controla o taco automaticamente no jogo de sinuca</string>
+</resources>
