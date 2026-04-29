@@ -18,7 +18,6 @@
         </activity>
         <service android:name=".CaptureService" android:foregroundServiceType="mediaProjection" android:exported="false"/>
         <service android:name=".TacadinhaAccessibility" android:exported="true"
-            android:label="@string/acc_label"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService"/>
